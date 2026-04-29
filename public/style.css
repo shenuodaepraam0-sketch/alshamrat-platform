@@ -1,0 +1,392 @@
+/* ================= RESET & FONTS ================= */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Cairo', sans-serif;
+  scroll-behavior: smooth;
+}
+
+/* تخصيص السكرول بار (Scrollbar) لمستوى احترافي */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0f0c29;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #00f7ff, #0066ff);
+  border-radius: 10px;
+}
+
+/* ================= BODY ================= */
+body {
+  background: #0f0c29;
+  /* خلفية متحركة لإعطاء عمق */
+  background: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #0f0c29 100%);
+  color: white;
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* ================= HEADER ================= */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 5%;
+  height: 80px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: rgba(15, 12, 41, 0.9);
+  backdrop-filter: blur(20px); /* تأثير زجاجي قوي */
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 2000;
+  border-bottom: 1px solid rgba(0, 247, 255, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: 900;
+  color: #00f7ff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0 0 15px rgba(0, 247, 255, 0.7);
+  cursor: pointer;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+}
+
+nav a {
+  color: rgba(255, 255, 255, 0.8);
+  margin-right: 20px;
+  text-decoration: none;
+  font-weight: 700;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  font-size: 16px;
+  position: relative;
+}
+
+nav a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -5px;
+  left: 0;
+  background: #00f7ff;
+  transition: 0.3s;
+}
+
+nav a:hover::after, 
+nav .active::after,
+nav a.active::after {
+  width: 100%;
+}
+
+nav a:hover, 
+nav .active,
+nav a.active {
+  color: #00f7ff;
+  text-shadow: 0 0 15px #00f7ff;
+}
+
+/* ================= MAIN ================= */
+main {
+  padding-top: 80px;
+}
+
+/* ================= HERO ================= */
+.hero {
+  position: relative;
+  text-align: center;
+  padding: 140px 20px 60px;
+  overflow: hidden;
+}
+
+/* إضافة عنصر ضوئي خلف الهيرو */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 300px;
+  background: #00f7ff;
+  filter: blur(150px);
+  opacity: 0.15;
+  z-index: -1;
+}
+
+.hero h2 {
+  font-size: clamp(2.5rem, 8vw, 4.5rem); /* حجم خط مرن للموبايل */
+  font-weight: 900;
+  margin-bottom: 25px;
+  background: linear-gradient(135deg, #fff 30%, #00f7ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: fadeInDown 1s ease-out;
+}
+
+.hero p {
+  font-size: clamp(1rem, 4vw, 1.3rem);
+  color: rgba(255, 255, 255, 0.8);
+  max-width: 700px;
+  margin: 0 auto 40px;
+  animation: fadeInUp 1.2s ease-out;
+}
+
+.hero button {
+  padding: 18px 50px;
+  font-size: 18px;
+  background: #00f7ff;
+  color: #000;
+  border: none;
+  border-radius: 50px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: 0.4s;
+  box-shadow: 0 0 20px rgba(0, 247, 255, 0.4);
+  text-transform: uppercase;
+}
+
+.hero button:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 0 40px rgba(0, 247, 255, 0.8);
+  letter-spacing: 1px;
+}
+
+/* ================= FILTER ================= */
+.filter-container {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  padding: 25px 10px;
+  position: sticky;
+  top: 80px;
+  z-index: 1000;
+  background: rgba(15, 12, 41, 0.9);
+  backdrop-filter: blur(10px);
+}
+
+.filter-btn {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  border: 1px solid rgba(0, 247, 255, 0.3);
+  padding: 10px 25px;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: 0.3s all;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  background: #00f7ff;
+  color: #000;
+  box-shadow: 0 0 20px rgba(0, 247, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+/* ================= GRID SYSTEM ================= */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+  padding: 40px 7%;
+  width: 100%;
+}
+
+/* ================= CARD (X-LEVEL) ================= */
+.card {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 247, 255, 0.15);
+  transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  text-align: right;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(45deg, transparent, rgba(0, 247, 255, 0.05), transparent);
+  transform: translateX(-100%);
+  transition: 0.6s;
+  pointer-events: none;
+}
+
+.card:hover::before {
+  transform: translateX(100%);
+}
+
+.card:hover {
+  transform: translateY(-15px);
+  border-color: rgba(0, 247, 255, 0.6);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(0, 247, 255, 0.3);
+  background: rgba(0, 247, 255, 0.08);
+}
+
+.card img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  transition: 0.8s;
+  filter: grayscale(20%);
+}
+
+.card:hover img {
+  transform: scale(1.1);
+  filter: grayscale(0%);
+}
+
+.card-content {
+  padding: 25px;
+  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* استخدم هذه الكلاس (card-no-img) في الـ HTML إذا كان الكارت بدون صورة للتعويض بالمسافات */
+.card-no-img .card-content {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.card h3 {
+  margin-bottom: 15px;
+  color: #00f7ff;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.card p {
+  color: rgba(221, 221, 221, 0.9);
+  font-size: 16px;
+  font-weight: 300;
+}
+
+/* ================= GLOW EFFECT ================= */
+.glow {
+  color: #00f7ff;
+  text-shadow: 0 0 10px rgba(0, 247, 255, 0.8), 0 0 30px rgba(0, 247, 255, 0.4);
+}
+
+/* ================= ANIMATIONS ================= */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ================= TEAM & FOOTER ================= */
+.team {
+  padding: 100px 20px;
+  background: rgba(255,255,255,0.02);
+  width: 100%;
+}
+
+footer {
+  text-align: center;
+  padding: 40px 20px;
+  color: rgba(255,255,255,0.4);
+  border-top: 1px solid rgba(255,255,255,0.05);
+  font-size: 14px;
+  letter-spacing: 1px;
+  opacity: 0.8;
+}
+
+/* ================= MOBILE OPTIMIZATION ================= */
+
+/* للهواتف المتوسطة والصغيرة */
+@media (max-width: 768px) {
+  header {
+    height: auto;
+    padding: 15px 5%;
+    flex-wrap: wrap; 
+    flex-direction: column; /* مدمج من الكود الثاني لتحسين شكل النافبار */
+    gap: 10px;
+  }
+
+  .logo {
+    font-size: 20px;
+  }
+
+  nav {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 5px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 10px;
+  }
+
+  nav a {
+    margin: 0 8px;
+    font-size: 14px;
+  }
+
+  main {
+    padding-top: 130px;
+  }
+
+  .hero {
+    padding-top: 160px;
+  }
+
+  .filter-container {
+    top: 125px;
+    padding: 15px 5px;
+    overflow-x: auto; /* يسمح بالتمرير الجانبي للفلاتر إذا كانت كثيرة */
+    justify-content: flex-start;
+  }
+
+  .filter-btn {
+    padding: 8px 18px;
+    font-size: 13px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr; /* كارت واحد في الصف للموبايل لتركيز أفضل */
+    padding: 20px 8%;
+  }
+
+  .card img {
+    height: 200px;
+  }
+}
+
+/* للهواتف الصغيرة جداً (مثل iPhone 5/SE) */
+@media (max-width: 380px) {
+  .hero h2 {
+    font-size: 28px;
+  }
+  
+  nav a {
+    margin: 0 4px;
+    font-size: 12px;
+  }
+  
+  .logo {
+    font-size: 18px;
+  }
+}

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة التحكم | الشمرات</title>
+<meta name="theme-color" content="#00f7ff">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<style>
+    body { background: #0f0c29; color: white; font-family: 'Cairo', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+    .admin-container { background: rgba(255,255,255,0.1); padding: 30px; border-radius: 20px; backdrop-filter: blur(10px); width: 100%; max-width: 500px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    input, select, button, textarea { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; font-size: 16px; }
+    textarea { height: 80px; resize: none; background: white; color: black; }
+    button { background: #00f7ff; color: #000; font-weight: bold; cursor: pointer; transition: 0.3s; }
+    button:hover { transform: scale(1.02); background: #00d8de; }
+    #admin-list { margin-top: 20px; text-align: right; max-height: 300px; overflow-y: auto; }
+</style>
+</head>
+<body>
+
+<div class="admin-container">
+    <a href="/" style="color: #00f7ff; text-decoration: none; font-size: 14px; display: block; margin-bottom: 20px;">⬅ الرجوع للرئيسية</a>
+    
+    <div id="login-box">
+        <h2>🔐 تسجيل الدخول</h2>
+        <input type="password" id="pass" placeholder="كلمة المرور">
+        <button onclick="login()">دخول</button>
+    </div>
+
+    <div id="panel" style="display:none;">
+        <h2>🚀 إدارة المنصة</h2>
+        <input type="file" id="file">
+        <select id="subject">
+    <option value="اللغة العربية">اللغة العربية</option>
+    <option value="اللغة الإنجليزية">اللغة الإنجليزية</option>
+    <option value="الرياضيات">الرياضيات</option>
+    <option value="العلوم المتكاملة">العلوم المتكاملة</option>
+    <option value="تاريخ">تاريخ</option>
+    <option value="فلسفة">فلسفة</option>
+<option value="فرنساوي">فرنساوي</option>
+
+</select>
+        <textarea id="description" placeholder="اكتب وصفاً أو ملاحظات للتقييم..."></textarea>
+        <button id="uploadBtn" onclick="uploadFile()">رفع التقييم الآن 🚀</button>
+        
+        <hr style="opacity: 0.2; margin: 25px 0;">
+        <h3>المنشورات الحالية</h3>
+        <div id="admin-list"></div>
+    </div>
+</div>
+
+<script src="upload.js"></script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>التقييمات | منصة الشمرات</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+<header>
+  <div class="logo">الشمرات 🔥</div>
+  <nav>
+    <a href="index.html">الرئيسية</a>
+    <a href="evaluations.html">التقييمات</a>
+    <a href="about.html">من نحن</a>
+  </nav>
+</header>
+
+<main>
+  <div class="filter-container" id="filterBar">
+    <button class="filter-btn active" onclick="applyFilter('الكل')">الكل</button>
+    <button class="filter-btn" onclick="applyFilter('اللغة العربية')">اللغة العربية</button>
+    <button class="filter-btn" onclick="applyFilter('اللغة الإنجليزية')">اللغة الإنجليزية</button>
+    <button class="filter-btn" onclick="applyFilter('الرياضيات')">الرياضيات</button>
+    <button class="filter-btn" onclick="applyFilter('العلوم المتكاملة')">العلوم</button>
+    <button class="filter-btn" onclick="applyFilter('تاريخ')">تاريخ</button>
+    <button class="filter-btn" onclick="applyFilter('فلسفة')">فلسفة</button>
+     <button class="filter-btn" onclick="applyFilter('فرنساوي')">فرنساوي</button>
+</div>
+
+  <section class="grid" id="evaluationsGrid">
+      </section>
+
+  <div style="text-align: center; padding: 40px;" id="loadMoreContainer">
+    <button id="loadMoreBtn" class="filter-btn" style="padding: 12px 40px; display: none;" onclick="renderNextBatch()">عرض المزيد من التقييمات</button>
+  </div>
+</main>
+
+<div id="imgModal" style="display:none; position:fixed; z-index:3000; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); justify-content:center; align-items:center; flex-direction:column; padding:20px;" onclick="closeModal()">
+    <span style="position:absolute; top:20px; right:30px; color:white; font-size:40px; cursor:pointer;">&times;</span>
+    <img id="modalImg" style="max-width:100%; max-height:85%; border-radius:10px; box-shadow:0 0 20px rgba(0,247,255,0.5);">
+    <p id="modalCaption" style="color:white; margin-top:15px; font-size:18px;"></p>
+</div>
+
+<script>
+let fullList = [];
+let filteredList = [];
+let displayCount = 0;
+const step = 6;
+
+// جلب البيانات عند التحميل
+window.onload = async () => {
+    try {
+        const res = await axios.get("/data");
+        fullList = res.data.reverse();
+        applyFilter('الكل');
+    } catch (err) {
+        document.getElementById("evaluationsGrid").innerHTML = "<p style='grid-column:1/-1; text-align:center;'>حدث خطأ أثناء تحميل البيانات</p>";
+    }
+};
+
+function applyFilter(subject) {
+    // تحديث شكل الأزرار
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if(btn.innerText === subject || (subject === 'الكل' && btn.innerText === 'الكل')) btn.classList.add('active');
+    });
+
+    if (subject === 'الكل') {
+        filteredList = fullList;
+    } else {
+        filteredList = fullList.filter(item => item.subject === subject);
+    }
+
+    displayCount = 0;
+    document.getElementById("evaluationsGrid").innerHTML = "";
+    renderNextBatch();
+}
+
+function renderNextBatch() {
+    const grid = document.getElementById("evaluationsGrid");
+    const nextBatch = filteredList.slice(displayCount, displayCount + step);
+
+    if (filteredList.length === 0) {
+        grid.innerHTML = "<p style='grid-column:1/-1; text-align:center; padding:50px; opacity:0.6;'>لا توجد تقييمات متاحة لهذا القسم حالياً 🧊</p>";
+        document.getElementById("loadMoreBtn").style.display = "none";
+        return;
+    }
+
+    nextBatch.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+            <img src="${item.image}" alt="${item.subject}" onclick="openImage('${item.image}', '${item.subject}')" loading="lazy">
+            <div class="card-content">
+                <h3>${item.subject}</h3>
+                <p style="font-size: 14px; margin-bottom: 15px; opacity: 0.8; height: 40px; overflow: hidden;">${item.description || 'لا يوجد وصف متاح'}</p>
+                <div style="display:flex; gap:10px;">
+                    <button onclick="openImage('${item.image}', '${item.subject}')" style="flex:1; background:#00f7ff; color:#000; border:none; padding:8px; border-radius:5px; font-weight:bold; cursor:pointer;">👁 تكبير</button>
+                    <button onclick="downloadImage('${item.image}', '${item.subject}')" style="flex:1; background:#fff; color:#000; border:none; padding:8px; border-radius:5px; font-weight:bold; cursor:pointer;">📥 تحميل</button>
+                </div>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+
+    displayCount += step;
+    const loadMoreBtn = document.getElementById("loadMoreBtn");
+    loadMoreBtn.style.display = (displayCount < filteredList.length) ? "inline-block" : "none";
+}
+
+function openImage(src, subject) {
+    document.getElementById("modalImg").src = src;
+    document.getElementById("modalCaption").innerText = subject;
+    document.getElementById("imgModal").style.display = "flex";
+}
+
+function closeModal() {
+    document.getElementById("imgModal").style.display = "none";
+}
+
+async function downloadImage(url, subject) {
+    try {
+        Swal.fire({ title: 'جاري التحضير...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
+        const response = await fetch(url);
+        const blob = await response.blob();
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = `تقييم-${subject}-${Date.now()}.jpg`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        Swal.close();
+    } catch (err) {
+        Swal.fire("❌", "فشل تحميل الصورة", "error");
+    }
+}
+</script>
+</body>
+</html>
